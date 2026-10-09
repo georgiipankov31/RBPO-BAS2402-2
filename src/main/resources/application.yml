@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: 1БАС24015
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+server:
+  port: 1218
+housing:
+  storage-file: ./data/housing.json
