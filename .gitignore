@@ -3,3 +3,5 @@ data/
 .idea/
 *.iml
 .DS_Store
+.env
+/start.sh

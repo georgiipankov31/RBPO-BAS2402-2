@@ -4,7 +4,9 @@ spring:
   jackson:
     deserialization:
       fail-on-unknown-properties: true
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:rbpo}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
 server:
   port: 1218
-housing:
-  storage-file: ./data/housing.json

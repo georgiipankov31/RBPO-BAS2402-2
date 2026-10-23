@@ -1,0 +1,1577 @@
+{
+  "info": {
+    "name": "РБПО. Общежитие. Задание 3",
+    "description": "В папке «0. Полный сценарий» запросы выполняются по порядку с 01. ID, даты и уникальный постфикс подставляются автоматически. Для нового запуска снова выполните запрос 01. Папка 7 удаляет созданные данные. Отдельные папки 1–4 содержат CRUD-запросы и бизнес-операции.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:1218"
+    },
+    {
+      "key": "runId",
+      "value": ""
+    },
+    {
+      "key": "today",
+      "value": ""
+    },
+    {
+      "key": "until",
+      "value": ""
+    },
+    {
+      "key": "extended",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "crudUserId",
+      "value": ""
+    },
+    {
+      "key": "roomId",
+      "value": ""
+    },
+    {
+      "key": "targetRoomId",
+      "value": ""
+    },
+    {
+      "key": "crudRoomId",
+      "value": ""
+    },
+    {
+      "key": "applicationId",
+      "value": ""
+    },
+    {
+      "key": "crudApplicationId",
+      "value": ""
+    },
+    {
+      "key": "cancelApplicationId",
+      "value": ""
+    },
+    {
+      "key": "crudContractId",
+      "value": ""
+    },
+    {
+      "key": "crudTransferId",
+      "value": ""
+    },
+    {
+      "key": "contractId",
+      "value": ""
+    },
+    {
+      "key": "transferId",
+      "value": ""
+    },
+    {
+      "key": "pendingTransferId",
+      "value": ""
+    },
+    {
+      "key": "demo_runId",
+      "value": ""
+    },
+    {
+      "key": "demo_today",
+      "value": ""
+    },
+    {
+      "key": "demo_until",
+      "value": ""
+    },
+    {
+      "key": "demo_extended",
+      "value": ""
+    },
+    {
+      "key": "demo_userId",
+      "value": ""
+    },
+    {
+      "key": "demo_roomAId",
+      "value": ""
+    },
+    {
+      "key": "demo_roomBId",
+      "value": ""
+    },
+    {
+      "key": "demo_cancelApplicationId",
+      "value": ""
+    },
+    {
+      "key": "demo_applicationId",
+      "value": ""
+    },
+    {
+      "key": "demo_contractId",
+      "value": ""
+    },
+    {
+      "key": "demo_transferId",
+      "value": ""
+    },
+    {
+      "key": "demo_pendingTransferId",
+      "value": ""
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if (pm.info.requestName === \"01. Создать жильца\") {",
+          "    pm.collectionVariables.set(\"runId\", String(Date.now()));",
+          "    const now = new Date();",
+          "    const until = new Date(now);",
+          "    until.setDate(until.getDate() + 30);",
+          "    const extended = new Date(now);",
+          "    extended.setDate(extended.getDate() + 60);",
+          "    pm.collectionVariables.set(\"today\", now.toLocaleDateString(\"en-CA\", {timeZone: \"Europe/Moscow\"}));",
+          "    pm.collectionVariables.set(\"until\", until.toLocaleDateString(\"en-CA\", {timeZone: \"Europe/Moscow\"}));",
+          "    pm.collectionVariables.set(\"extended\", extended.toLocaleDateString(\"en-CA\", {timeZone: \"Europe/Moscow\"}));",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Полный сценарий",
+      "description": "Выполняйте запросы по порядку с 01. При новом запуске создается уникальный постфикс. ID и даты заполняются автоматически. Папку 7 можно пропустить, чтобы оставить данные в БД.",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.info.requestName === \"01. Создать пользователя\") {",
+              "    const keys = [\"demo_runId\",\"demo_today\",\"demo_until\",\"demo_extended\",\"demo_userId\",\"demo_roomAId\",\"demo_roomBId\",\"demo_cancelApplicationId\",\"demo_applicationId\",\"demo_contractId\",\"demo_transferId\",\"demo_pendingTransferId\"];",
+              "    for (const key of keys) {",
+              "        pm.collectionVariables.set(key, \"\");",
+              "    }",
+              "    pm.collectionVariables.set(\"demo_runId\", pm.variables.replaceIn(\"{{$guid}}\"));",
+              "    const today = new Date();",
+              "    const until = new Date(today);",
+              "    until.setDate(until.getDate() + 30);",
+              "    const extended = new Date(today);",
+              "    extended.setDate(extended.getDate() + 60);",
+              "    pm.collectionVariables.set(\"demo_today\", today.toLocaleDateString(\"en-CA\", {timeZone: \"Europe/Moscow\"}));",
+              "    pm.collectionVariables.set(\"demo_until\", until.toLocaleDateString(\"en-CA\", {timeZone: \"Europe/Moscow\"}));",
+              "    pm.collectionVariables.set(\"demo_extended\", extended.toLocaleDateString(\"en-CA\", {timeZone: \"Europe/Moscow\"}));",
+              "}"
+            ]
+          }
+        }
+      ],
+      "item": [
+        {
+          "name": "1. Создать пользователя и комнаты",
+          "item": [
+            {
+              "name": "01. Создать пользователя",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/users",
+                "description": "201. Имя с уникальным постфиксом. ID сохраняется из ответа.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Аня {{demo_runId}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                      "    pm.collectionVariables.set(\"demo_userId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "02. Создать комнату А",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms",
+                "description": "201. Свободная комната на одного жильца; номер уникален для этого запуска.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"number\": \"A-{{demo_runId}}\",\n  \"capacity\": 1,\n  \"available\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                      "    pm.collectionVariables.set(\"demo_roomAId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "03. Создать комнату Б",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms",
+                "description": "201. Вторая свободная комната для переселения.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"number\": \"B-{{demo_runId}}\",\n  \"capacity\": 1,\n  \"available\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                      "    pm.collectionVariables.set(\"demo_roomBId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "2. Подать и отменить заявку",
+          "item": [
+            {
+              "name": "04. Подать заявку для отмены",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications",
+                "description": "201. Заявка относится к пользователю этого запуска.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": {{demo_userId}},\n  \"status\": \"NEW\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                      "    pm.collectionVariables.set(\"demo_cancelApplicationId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "05. Отменить заявку",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "{{baseUrl}}/api/housing-applications/{{demo_cancelApplicationId}}/cancel",
+                "description": "200. В ответе status = CANCELLED."
+              }
+            },
+            {
+              "name": "06. Посмотреть отмененную заявку",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/api/housing-applications/{{demo_cancelApplicationId}}",
+                "description": "200. Заявка сохранилась в БД со статусом CANCELLED."
+              }
+            },
+            {
+              "name": "07. Заселить по отмененной заявке: ожидается 409",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demo_cancelApplicationId}}/settle",
+                "description": "409. Отмененная заявка не позволяет создать договор.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"roomId\": {{demo_roomAId}},\n  \"checkOutDate\": \"{{demo_until}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. Подать новую заявку и заселиться",
+          "item": [
+            {
+              "name": "08. Подать новую заявку на проживание",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications",
+                "description": "201. Новая заявка того же пользователя, status = NEW.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": {{demo_userId}},\n  \"status\": \"NEW\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                      "    pm.collectionVariables.set(\"demo_applicationId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "09. Заселить в комнату А",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demo_applicationId}}/settle",
+                "description": "200. Создается договор ACTIVE; дата заселения сегодняшняя, дата окончания через 30 дней. ID договора сохраняется автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"roomId\": {{demo_roomAId}},\n  \"checkOutDate\": \"{{demo_until}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                      "    pm.collectionVariables.set(\"demo_contractId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "10. Посмотреть одобренную заявку",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/api/housing-applications/{{demo_applicationId}}",
+                "description": "200. status = APPROVED: заселение изменило исходную заявку."
+              }
+            },
+            {
+              "name": "11. Посмотреть действующий договор",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demo_contractId}}",
+                "description": "200. status = ACTIVE, roomId соответствует комнате А."
+              }
+            },
+            {
+              "name": "12. Заселиться повторно: ожидается 409",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demo_applicationId}}/settle",
+                "description": "409. Повторное заселение по уже обработанной заявке запрещено.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"roomId\": {{demo_roomAId}},\n  \"checkOutDate\": \"{{demo_until}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "4. Продлить проживание",
+          "item": [
+            {
+              "name": "13. Продлить проживание до 60 дней",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demo_contractId}}/extend",
+                "description": "200. checkOutDate становится на 30 дней позже прежней даты.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"checkOutDate\": \"{{demo_extended}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "14. Посмотреть новую дату окончания",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demo_contractId}}",
+                "description": "200. Договор ACTIVE, checkOutDate соответствует новой дате."
+              }
+            }
+          ]
+        },
+        {
+          "name": "5. Переселиться из А в Б",
+          "item": [
+            {
+              "name": "15. Подать заявку на переселение в Б",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/room-transfer-requests",
+                "description": "201. Заявка NEW связывает текущий договор с комнатой Б.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": {{demo_contractId}},\n  \"targetRoomId\": {{demo_roomBId}},\n  \"status\": \"NEW\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                      "    pm.collectionVariables.set(\"demo_transferId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "16. Подтвердить переселение",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "{{baseUrl}}/api/room-transfer-requests/{{demo_transferId}}/approve",
+                "description": "200. Заявка становится APPROVED, в договоре меняется roomId."
+              }
+            },
+            {
+              "name": "17. Посмотреть договор после переселения",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demo_contractId}}",
+                "description": "200. roomId теперь соответствует комнате Б, договор остается ACTIVE."
+              }
+            },
+            {
+              "name": "18. Посмотреть выполненную заявку на переселение",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/api/room-transfer-requests/{{demo_transferId}}",
+                "description": "200. status = APPROVED."
+              }
+            }
+          ]
+        },
+        {
+          "name": "6. Выселиться и проверить связанные записи",
+          "item": [
+            {
+              "name": "19. Подать еще одну заявку на переселение в А",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/room-transfer-requests",
+                "description": "201. Заявка остается NEW и отменяется при выселении.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": {{demo_contractId}},\n  \"targetRoomId\": {{demo_roomAId}},\n  \"status\": \"NEW\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                      "    pm.collectionVariables.set(\"demo_pendingTransferId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "20. Выселить жильца",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demo_contractId}}/check-out",
+                "description": "200. Договор завершается, дата выезда становится сегодняшней; исходная заявка завершается, необработанное переселение отменяется."
+              }
+            },
+            {
+              "name": "21. Посмотреть завершенный договор",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demo_contractId}}",
+                "description": "200. status = COMPLETED, checkOutDate = сегодня."
+              }
+            },
+            {
+              "name": "22. Посмотреть завершенную заявку на проживание",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/api/housing-applications/{{demo_applicationId}}",
+                "description": "200. status = COMPLETED."
+              }
+            },
+            {
+              "name": "23. Посмотреть автоматически отмененное переселение",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/api/room-transfer-requests/{{demo_pendingTransferId}}",
+                "description": "200. status = CANCELLED."
+              }
+            },
+            {
+              "name": "24. Выселить повторно: ожидается 409",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demo_contractId}}/check-out",
+                "description": "409. Договор уже завершен."
+              }
+            }
+          ]
+        },
+        {
+          "name": "7. Удаление данных (необязательно)",
+          "item": [
+            {
+              "name": "25. Удалить отмененную заявку на переселение",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/api/room-transfer-requests/{{demo_pendingTransferId}}",
+                "description": "204. Удаляется только запись этого запуска."
+              }
+            },
+            {
+              "name": "26. Удалить выполненную заявку на переселение",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/api/room-transfer-requests/{{demo_transferId}}",
+                "description": "204."
+              }
+            },
+            {
+              "name": "27. Удалить завершенный договор",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demo_contractId}}",
+                "description": "204."
+              }
+            },
+            {
+              "name": "28. Удалить завершенную заявку на проживание",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/api/housing-applications/{{demo_applicationId}}",
+                "description": "204."
+              }
+            },
+            {
+              "name": "29. Удалить отмененную заявку на проживание",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/api/housing-applications/{{demo_cancelApplicationId}}",
+                "description": "204."
+              }
+            },
+            {
+              "name": "30. Удалить свободную комнату А",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/api/rooms/{{demo_roomAId}}",
+                "description": "204."
+              }
+            },
+            {
+              "name": "31. Удалить свободную комнату Б",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/api/rooms/{{demo_roomBId}}",
+                "description": "204."
+              }
+            },
+            {
+              "name": "32. Удалить пользователя",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/api/users/{{demo_userId}}",
+                "description": "204."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "1. Создание данных",
+      "item": [
+        {
+          "name": "01. Создать жильца",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/users",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Иван Петров {{runId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "    pm.collectionVariables.set(\"userId\", pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02. Создать пользователя для CRUD",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/users",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Анна Смирнова {{runId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "    pm.collectionVariables.set(\"crudUserId\", pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03. Создать первую комнату",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/rooms",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"number\": \"A-{{runId}}\",\n  \"capacity\": 1,\n  \"available\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "    pm.collectionVariables.set(\"roomId\", pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04. Создать комнату для переселения",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/rooms",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"number\": \"B-{{runId}}\",\n  \"capacity\": 1,\n  \"available\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "    pm.collectionVariables.set(\"targetRoomId\", pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05. Создать комнату для CRUD",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/rooms",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"number\": \"C-{{runId}}\",\n  \"capacity\": 2,\n  \"available\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "    pm.collectionVariables.set(\"crudRoomId\", pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06. Подать заявку жильца",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/housing-applications",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": {{userId}},\n  \"status\": \"NEW\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "    pm.collectionVariables.set(\"applicationId\", pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07. Подать заявку для CRUD",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/housing-applications",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": {{crudUserId}},\n  \"status\": \"NEW\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "    pm.collectionVariables.set(\"crudApplicationId\", pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08. Подать заявку для отмены",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/housing-applications",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": {{userId}},\n  \"status\": \"NEW\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "    pm.collectionVariables.set(\"cancelApplicationId\", pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "09. Создать договор через CRUD",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/residence-contracts",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"applicationId\": {{crudApplicationId}},\n  \"roomId\": {{crudRoomId}},\n  \"checkInDate\": \"{{today}}\",\n  \"checkOutDate\": \"{{until}}\",\n  \"status\": \"ACTIVE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "    pm.collectionVariables.set(\"crudContractId\", pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10. Создать заявку на переселение через CRUD",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/room-transfer-requests",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": {{crudContractId}},\n  \"targetRoomId\": {{targetRoomId}},\n  \"status\": \"NEW\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "    pm.collectionVariables.set(\"crudTransferId\", pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Чтение и изменение CRUD",
+      "item": [
+        {
+          "name": "Список users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/users"
+          }
+        },
+        {
+          "name": "Получить users по id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/users/{{userId}}"
+          }
+        },
+        {
+          "name": "Изменить users",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/users/{{userId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Иван Сергеевич Петров {{runId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Список rooms",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/rooms"
+          }
+        },
+        {
+          "name": "Получить rooms по id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/rooms/{{crudRoomId}}"
+          }
+        },
+        {
+          "name": "Изменить rooms",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/rooms/{{crudRoomId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"capacity\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Список housing-applications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/housing-applications"
+          }
+        },
+        {
+          "name": "Получить housing-applications по id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/housing-applications/{{applicationId}}"
+          }
+        },
+        {
+          "name": "Изменить housing-applications",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/housing-applications/{{applicationId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": {{userId}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Список residence-contracts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/residence-contracts"
+          }
+        },
+        {
+          "name": "Получить residence-contracts по id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/residence-contracts/{{crudContractId}}"
+          }
+        },
+        {
+          "name": "Изменить residence-contracts",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/residence-contracts/{{crudContractId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"checkOutDate\": \"{{extended}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Список room-transfer-requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/room-transfer-requests"
+          }
+        },
+        {
+          "name": "Получить room-transfer-requests по id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/room-transfer-requests/{{crudTransferId}}"
+          }
+        },
+        {
+          "name": "Изменить room-transfer-requests",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/room-transfer-requests/{{crudTransferId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetRoomId\": {{roomId}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Удаление CRUD",
+      "item": [
+        {
+          "name": "Удалить заявку на переселение",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/room-transfer-requests/{{crudTransferId}}"
+          }
+        },
+        {
+          "name": "Выселить пользователя перед удалением договора",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/residence-contracts/{{crudContractId}}/check-out"
+          }
+        },
+        {
+          "name": "Удалить завершённый договор",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/residence-contracts/{{crudContractId}}"
+          }
+        },
+        {
+          "name": "Удалить заявку",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/housing-applications/{{crudApplicationId}}"
+          }
+        },
+        {
+          "name": "Удалить свободную комнату",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/rooms/{{crudRoomId}}"
+          }
+        },
+        {
+          "name": "Удалить пользователя",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/api/users/{{crudUserId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Пять бизнес-операций",
+      "item": [
+        {
+          "name": "1. Заселить жильца",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/housing-applications/{{applicationId}}/settle",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomId\": {{roomId}},\n  \"checkOutDate\": \"{{until}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "    pm.collectionVariables.set(\"contractId\", pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Повторное заселение: ожидается 409",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/housing-applications/{{applicationId}}/settle",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomId\": {{roomId}},\n  \"checkOutDate\": \"{{until}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "2. Продлить проживание",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/residence-contracts/{{contractId}}/extend",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"checkOutDate\": \"{{extended}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Подать заявку на переселение",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/room-transfer-requests",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": {{contractId}},\n  \"targetRoomId\": {{targetRoomId}},\n  \"status\": \"NEW\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "    pm.collectionVariables.set(\"transferId\", pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. Подтвердить переселение",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/room-transfer-requests/{{transferId}}/approve"
+          }
+        },
+        {
+          "name": "Посмотреть договор после переселения",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/residence-contracts/{{contractId}}"
+          }
+        },
+        {
+          "name": "4. Отменить вторую заявку",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/housing-applications/{{cancelApplicationId}}/cancel"
+          }
+        },
+        {
+          "name": "Создать незавершённую заявку перед выселением",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/room-transfer-requests",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": {{contractId}},\n  \"targetRoomId\": {{roomId}},\n  \"status\": \"NEW\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) {",
+                  "    pm.collectionVariables.set(\"pendingTransferId\", pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "5. Выселить жильца",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/residence-contracts/{{contractId}}/check-out"
+          }
+        },
+        {
+          "name": "Проверить завершение заявки",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/housing-applications/{{applicationId}}"
+          }
+        },
+        {
+          "name": "Проверить отмену незавершённого переселения",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/room-transfer-requests/{{pendingTransferId}}"
+          }
+        },
+        {
+          "name": "Повторное выселение: ожидается 409",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/api/residence-contracts/{{contractId}}/check-out"
+          }
+        }
+      ]
+    }
+  ]
+}

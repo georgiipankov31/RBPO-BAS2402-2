@@ -1,12 +1,12 @@
 package ru.mtuci.rbpo.lab2.service;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import ru.mtuci.rbpo.lab2.model.HousingApplicationEntry;
@@ -14,27 +14,25 @@ import ru.mtuci.rbpo.lab2.model.ResidenceContract;
 import ru.mtuci.rbpo.lab2.model.Room;
 import ru.mtuci.rbpo.lab2.model.RoomTransferRequest;
 import ru.mtuci.rbpo.lab2.model.User;
-import ru.mtuci.rbpo.lab2.repository.HousingData;
-import ru.mtuci.rbpo.lab2.repository.JsonHousingRepository;
+import ru.mtuci.rbpo.lab2.repository.HousingRepository;
 
 @Service
+@Transactional(isolation = Isolation.SERIALIZABLE)
 public class HousingService {
-    private final JsonHousingRepository repository;
+    private final HousingRepository repository;
 
-    public HousingService(JsonHousingRepository repository) {
+    public HousingService(HousingRepository repository) {
         this.repository = repository;
     }
 
     public List<User> users() {
-        HousingData data = repository.getData();
-        return new ArrayList<>(data.users().values());
+        return repository.users();
     }
 
     public User user(long id) {
-        HousingData data = repository.getData();
-        User value = data.users().get(id);
+        User value = repository.user(id);
         if (value == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден");
         }
         return value;
     }
@@ -43,37 +41,25 @@ public class HousingService {
         if (id != null) {
             user(id);
         }
-
-        HousingData data = repository.getData();
-        long resourceId = id == null ? data.nextId() : id;
-        User value = new User(resourceId, name);
-        data.users().put(value.id(), value);
-        saveData(data, id == null);
-        return value;
+        return repository.saveUser(id, name);
     }
 
     public void deleteUser(long id) {
         user(id);
-        HousingData data = repository.getData();
-        for (HousingApplicationEntry application : new ArrayList<>(data.applications().values())) {
-            if (application.userId() == id) {
-                removeApplication(data, application.id());
-            }
+        if (repository.hasActiveContract(id)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Сначала выполните выселение");
         }
-        data.users().remove(id);
-        repository.save(data);
+        repository.deleteUser(id);
     }
 
     public List<Room> rooms() {
-        HousingData data = repository.getData();
-        return new ArrayList<>(data.rooms().values());
+        return repository.rooms();
     }
 
     public Room room(long id) {
-        HousingData data = repository.getData();
-        Room value = data.rooms().get(id);
+        Room value = repository.room(id);
         if (value == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Комната не найдена");
         }
         return value;
     }
@@ -81,179 +67,175 @@ public class HousingService {
     public Room saveRoom(Long id, String number, int capacity, boolean available) {
         if (id != null) {
             room(id);
+            int occupied = repository.occupiedPlaces(id);
+            if (capacity < occupied || (!available && occupied > 0)) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "Нельзя уменьшить вместимость ниже числа жильцов или закрыть занятую комнату");
+            }
         }
-
-        HousingData data = repository.getData();
-        long resourceId = id == null ? data.nextId() : id;
-        Room value = new Room(resourceId, number, capacity, available);
-        data.rooms().put(value.id(), value);
-        saveData(data, id == null);
-        return value;
+        return repository.saveRoom(id, number, capacity, available);
     }
 
     public void deleteRoom(long id) {
         room(id);
-        HousingData data = repository.getData();
-        for (ResidenceContract contract : new ArrayList<>(data.contracts().values())) {
-            if (contract.roomId() == id) {
-                removeContract(data, contract.id());
-            }
+        if (repository.occupiedPlaces(id) > 0) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "В комнате есть жильцы");
         }
-        for (RoomTransferRequest transfer : new ArrayList<>(data.transfers().values())) {
-            if (transfer.targetRoomId() == id) {
-                data.transfers().remove(transfer.id());
-            }
-        }
-        data.rooms().remove(id);
-        repository.save(data);
+        repository.deleteRoom(id);
     }
 
     public List<HousingApplicationEntry> applications() {
-        HousingData data = repository.getData();
-        return new ArrayList<>(data.applications().values());
+        return repository.applications();
     }
 
     public HousingApplicationEntry application(long id) {
-        HousingData data = repository.getData();
-        HousingApplicationEntry value = data.applications().get(id);
+        HousingApplicationEntry value = repository.application(id);
         if (value == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Заявка не найдена");
         }
         return value;
     }
 
-    public HousingApplicationEntry saveApplication(
-            Long id, long userId, String status) {
-        HousingApplicationEntry old = id == null ? null : application(id);
+    public HousingApplicationEntry saveApplication(Long id, long userId, String status) {
         user(userId);
-
-        HousingData data = repository.getData();
-        long resourceId = id == null ? data.nextId() : id;
-        HousingApplicationEntry value =
-                new HousingApplicationEntry(
-                        resourceId,
-                        userId,
-                        old == null ? Instant.now() : old.submittedAt(),
-                        status);
-        data.applications().put(value.id(), value);
-        saveData(data, id == null);
-        return value;
+        if (id == null) {
+            if (status == null) {
+                status = "NEW";
+            }
+            if (!"NEW".equals(status)) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Новая заявка должна иметь статус NEW");
+            }
+        } else {
+            HousingApplicationEntry old = application(id);
+            if (!old.status().equals(status) || (!"NEW".equals(old.status()) && old.userId() != userId)) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "Статус меняется бизнес-операциями; менять заявителя можно только у новой заявки");
+            }
+        }
+        return repository.saveApplication(id, userId, status);
     }
 
     public void deleteApplication(long id) {
         application(id);
-        HousingData data = repository.getData();
-        removeApplication(data, id);
-        repository.save(data);
+        if (repository.applicationHasActiveContract(id)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Сначала выполните выселение");
+        }
+        repository.deleteApplication(id);
     }
 
     public List<ResidenceContract> contracts() {
-        HousingData data = repository.getData();
-        return new ArrayList<>(data.contracts().values());
+        return repository.contracts();
     }
 
     public ResidenceContract contract(long id) {
-        HousingData data = repository.getData();
-        ResidenceContract value = data.contracts().get(id);
+        ResidenceContract value = repository.contract(id);
         if (value == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Договор не найден");
         }
         return value;
     }
 
-    public ResidenceContract saveContract(
-            Long id,
-            long applicationId,
-            long roomId,
-            LocalDate checkInDate,
-            LocalDate checkOutDate,
-            String status) {
-        if (id != null) {
-            contract(id);
-        }
-        application(applicationId);
+    public ResidenceContract saveContract(Long id, long applicationId, long roomId,
+            LocalDate checkInDate, LocalDate checkOutDate, String status) {
+        HousingApplicationEntry application = application(applicationId);
         room(roomId);
-
-        HousingData data = repository.getData();
-        long resourceId = id == null ? data.nextId() : id;
-        ResidenceContract value =
-                new ResidenceContract(
-                        resourceId, applicationId, roomId, checkInDate, checkOutDate, status);
-        data.contracts().put(value.id(), value);
-        saveData(data, id == null);
-        return value;
+        if (checkInDate == null || checkOutDate == null || checkOutDate.isBefore(checkInDate)
+                || checkInDate.isAfter(LocalDate.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Некорректные даты проживания");
+        }
+        if (id == null) {
+            if (status == null) {
+                status = "ACTIVE";
+            }
+            if (!"ACTIVE".equals(status) || !"NEW".equals(application.status())
+                    || checkOutDate.isBefore(LocalDate.now())) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "Договор создаётся действующим по новой заявке с неистекшим сроком проживания");
+            }
+            if (repository.hasActiveContract(application.userId())) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Пользователь уже проживает в общежитии");
+            }
+            checkFreeRoom(roomId);
+            repository.setApplicationStatus(applicationId, "APPROVED");
+        } else {
+            ResidenceContract old = contract(id);
+            if (!"ACTIVE".equals(old.status()) || !old.status().equals(status)
+                    || old.applicationId() != applicationId || old.roomId() != roomId
+                    || !old.checkInDate().equals(checkInDate)) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "У действующего договора можно менять только дату окончания; для переселения и выселения есть операции");
+            }
+            if (!old.checkOutDate().equals(checkOutDate)) {
+                checkExtension(old, checkOutDate);
+            }
+        }
+        return repository.saveContract(id, applicationId, roomId, checkInDate, checkOutDate, status);
     }
 
     public void deleteContract(long id) {
-        contract(id);
-        HousingData data = repository.getData();
-        removeContract(data, id);
-        repository.save(data);
+        if ("ACTIVE".equals(contract(id).status())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Сначала выполните выселение");
+        }
+        repository.deleteContract(id);
     }
 
     public List<RoomTransferRequest> transfers() {
-        HousingData data = repository.getData();
-        return new ArrayList<>(data.transfers().values());
+        return repository.transfers();
     }
 
     public RoomTransferRequest transfer(long id) {
-        HousingData data = repository.getData();
-        RoomTransferRequest value = data.transfers().get(id);
+        RoomTransferRequest value = repository.transfer(id);
         if (value == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Заявка на переселение не найдена");
         }
         return value;
     }
 
-    public RoomTransferRequest saveTransfer(
-            Long id, long contractId, long targetRoomId, String status) {
-        RoomTransferRequest old = id == null ? null : transfer(id);
-        contract(contractId);
-        room(targetRoomId);
-
-        HousingData data = repository.getData();
-        long resourceId = id == null ? data.nextId() : id;
-        RoomTransferRequest value =
-                new RoomTransferRequest(
-                        resourceId,
-                        contractId,
-                        targetRoomId,
-                        old == null ? Instant.now() : old.submittedAt(),
-                        status);
-        data.transfers().put(value.id(), value);
-        saveData(data, id == null);
-        return value;
+    public RoomTransferRequest saveTransfer(Long id, long contractId, long targetRoomId, String status) {
+        ResidenceContract contract = contract(contractId);
+        checkActiveContract(contract);
+        Room target = room(targetRoomId);
+        if (contract.roomId() == targetRoomId || !target.available()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Для переселения выберите другую открытую комнату");
+        }
+        if (status == null && id == null) {
+            status = "NEW";
+        }
+        if (!"NEW".equals(status)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Статус меняется операцией переселения");
+        }
+        if (id != null) {
+            RoomTransferRequest old = transfer(id);
+            if (!"NEW".equals(old.status()) || old.contractId() != contractId) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Можно менять только комнату новой заявки");
+            }
+        }
+        return repository.saveTransfer(id, contractId, targetRoomId, status);
     }
 
     public void deleteTransfer(long id) {
         transfer(id);
-        HousingData data = repository.getData();
-        data.transfers().remove(id);
-        repository.save(data);
+        repository.deleteTransfer(id);
     }
 
-    private void saveData(HousingData data, boolean created) {
-        if (created) {
-            data = data.withNextId(data.nextId() + 1);
+    public void checkFreeRoom(long roomId) {
+        Room room = room(roomId);
+        if (!room.available() || repository.occupiedPlaces(roomId) >= room.capacity()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Комната закрыта или нет свободных мест");
         }
-        repository.save(data);
     }
 
-    private void removeContract(HousingData data, long id) {
-        for (RoomTransferRequest transfer : new ArrayList<>(data.transfers().values())) {
-            if (transfer.contractId() == id) {
-                data.transfers().remove(transfer.id());
-            }
+    public void checkActiveContract(ResidenceContract contract) {
+        if (!"ACTIVE".equals(contract.status()) || contract.checkOutDate().isBefore(LocalDate.now())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Договор завершён или срок проживания истёк");
         }
-        data.contracts().remove(id);
     }
 
-    private void removeApplication(HousingData data, long id) {
-        for (ResidenceContract contract : new ArrayList<>(data.contracts().values())) {
-            if (contract.applicationId() == id) {
-                removeContract(data, contract.id());
-            }
+    public void checkExtension(ResidenceContract contract, LocalDate checkOutDate) {
+        checkActiveContract(contract);
+        if (checkOutDate == null || !checkOutDate.isAfter(contract.checkOutDate())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Новая дата должна быть позже прежней");
         }
-        data.applications().remove(id);
     }
 }
