@@ -20,9 +20,11 @@ import ru.mtuci.rbpo.lab2.repository.HousingRepository;
 @Transactional(isolation = Isolation.SERIALIZABLE)
 public class HousingService {
     private final HousingRepository repository;
+    private final AccountService accounts;
 
-    public HousingService(HousingRepository repository) {
+    public HousingService(HousingRepository repository, AccountService accounts) {
         this.repository = repository;
+        this.accounts = accounts;
     }
 
     public List<User> users() {
@@ -34,6 +36,7 @@ public class HousingService {
         if (value == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден");
         }
+        accounts.checkUser(id);
         return value;
     }
 
@@ -93,6 +96,7 @@ public class HousingService {
         if (value == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Заявка не найдена");
         }
+        accounts.checkUser(value.userId());
         return value;
     }
 
@@ -132,6 +136,7 @@ public class HousingService {
         if (value == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Договор не найден");
         }
+        application(value.applicationId());
         return value;
     }
 
@@ -188,6 +193,7 @@ public class HousingService {
         if (value == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Заявка на переселение не найдена");
         }
+        contract(value.contractId());
         return value;
     }
 

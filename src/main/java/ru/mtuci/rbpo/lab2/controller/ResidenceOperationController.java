@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import ru.mtuci.rbpo.lab2.dto.ExtensionRequest;
 import ru.mtuci.rbpo.lab2.dto.SettlementRequest;
@@ -15,6 +16,7 @@ import ru.mtuci.rbpo.lab2.service.ResidenceService;
 
 @RestController
 @RequestMapping("/api")
+@PreAuthorize("hasRole('ADMIN')")
 public class ResidenceOperationController {
     private final ResidenceService service;
 
@@ -28,6 +30,7 @@ public class ResidenceOperationController {
     }
 
     @PostMapping("/housing-applications/{id}/cancel")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public HousingApplicationEntry cancel(@PathVariable long id) {
         return service.cancelApplication(id);
     }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -22,6 +23,7 @@ import ru.mtuci.rbpo.lab2.service.HousingService;
 
 @RestController
 @RequestMapping("/api/residence-contracts")
+@PreAuthorize("hasRole('ADMIN')")
 public class ResidenceContractController {
     private final HousingService service;
 
@@ -35,6 +37,7 @@ public class ResidenceContractController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResidenceContract get(@PathVariable long id) {
         return service.contract(id);
     }

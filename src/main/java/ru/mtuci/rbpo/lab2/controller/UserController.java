@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import ru.mtuci.rbpo.lab2.dto.UserRequest;
 import ru.mtuci.rbpo.lab2.model.User;
@@ -20,6 +21,8 @@ import ru.mtuci.rbpo.lab2.service.HousingService;
 
 @RestController
 @RequestMapping("/api/users")
+// Перед вызовом методов Spring проверяет ROLE_ADMIN; иначе возвращает 403.
+@PreAuthorize("hasRole('ADMIN')")
 public class UserController {
     private final HousingService service;
 
@@ -33,6 +36,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    // Правило метода заменяет правило класса; владельца записи проверяет сервис.
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public User get(@PathVariable long id) {
         return service.user(id);
     }
@@ -44,6 +49,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public User update(@PathVariable long id, @RequestBody ObjectNode patch) {
         User old = service.user(id);
         String name = old.name();

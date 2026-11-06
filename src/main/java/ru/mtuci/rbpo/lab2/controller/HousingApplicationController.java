@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import ru.mtuci.rbpo.lab2.dto.HousingApplicationRequest;
 import ru.mtuci.rbpo.lab2.model.HousingApplicationEntry;
@@ -20,6 +21,7 @@ import ru.mtuci.rbpo.lab2.service.HousingService;
 
 @RestController
 @RequestMapping("/api/housing-applications")
+@PreAuthorize("hasRole('ADMIN')")
 public class HousingApplicationController {
     private final HousingService service;
 
@@ -33,11 +35,13 @@ public class HousingApplicationController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public HousingApplicationEntry get(@PathVariable long id) {
         return service.application(id);
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<HousingApplicationEntry> create(
             @RequestBody HousingApplicationRequest r) {
         HousingApplicationEntry result = service.saveApplication(null, r.userId(), r.status());
@@ -45,6 +49,7 @@ public class HousingApplicationController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public HousingApplicationEntry update(@PathVariable long id, @RequestBody ObjectNode patch) {
         HousingApplicationEntry old = service.application(id);
         long userId = old.userId();
@@ -61,6 +66,7 @@ public class HousingApplicationController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable long id) {
         service.deleteApplication(id);
         return ResponseEntity.noContent().build();

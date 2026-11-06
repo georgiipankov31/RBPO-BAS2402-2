@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import ru.mtuci.rbpo.lab2.dto.RoomRequest;
 import ru.mtuci.rbpo.lab2.model.Room;
@@ -20,6 +21,7 @@ import ru.mtuci.rbpo.lab2.service.HousingService;
 
 @RestController
 @RequestMapping("/api/rooms")
+@PreAuthorize("hasRole('ADMIN')")
 public class RoomController {
     private final HousingService service;
 
@@ -28,11 +30,13 @@ public class RoomController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<Room> list() {
         return service.rooms();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Room get(@PathVariable long id) {
         return service.room(id);
     }

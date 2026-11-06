@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import ru.mtuci.rbpo.lab2.dto.TransferRequest;
 import ru.mtuci.rbpo.lab2.model.RoomTransferRequest;
@@ -20,6 +21,7 @@ import ru.mtuci.rbpo.lab2.service.HousingService;
 
 @RestController
 @RequestMapping("/api/room-transfer-requests")
+@PreAuthorize("hasRole('ADMIN')")
 public class RoomTransferRequestController {
     private final HousingService service;
 
@@ -33,11 +35,13 @@ public class RoomTransferRequestController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public RoomTransferRequest get(@PathVariable long id) {
         return service.transfer(id);
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<RoomTransferRequest> create(@RequestBody TransferRequest r) {
         RoomTransferRequest result =
                 service.saveTransfer(null, r.contractId(), r.targetRoomId(), r.status());
@@ -45,6 +49,7 @@ public class RoomTransferRequestController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public RoomTransferRequest update(@PathVariable long id, @RequestBody ObjectNode patch) {
         RoomTransferRequest old = service.transfer(id);
         long contractId = old.contractId();
@@ -65,6 +70,7 @@ public class RoomTransferRequestController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable long id) {
         service.deleteTransfer(id);
         return ResponseEntity.noContent().build();
