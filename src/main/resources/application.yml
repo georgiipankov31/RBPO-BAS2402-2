@@ -10,3 +10,8 @@ spring:
     password: ${DB_PASSWORD}
 server:
   port: 1218
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    access-lifetime-seconds: ${JWT_ACCESS_LIFETIME_SECONDS:900}
+    refresh-lifetime-seconds: ${JWT_REFRESH_LIFETIME_SECONDS:604800}
