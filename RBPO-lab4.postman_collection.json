@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Общежитие. Basic Auth и права",
-    "description": "Выберите окружение RBPO local и выполняйте папки с 0 по 6 по порядку. У каждого запроса явно задана учетка на вкладке Authorization. ADMIN-запросы автоматически отправляют Basic Auth с данными администратора из окружения: отдельного входа нет. Запросы «Без Authorization» не отправляют логин и пароль. Cookie нужны для CSRF и не заменяют Basic Auth. У ADMIN, Ани, Бориса и анонимного клиента отдельные cookie и CSRF-токены; в основных запросах cookie jar отключена. В описании каждого запроса указаны действие, ожидаемый код и причина. Папка 7 удаляет созданные данные по желанию. Для нового полного запуска начните с первого запроса. Коды в названиях операций относятся к последовательному запуску: повторная регистрация, отмена или удаление могут вернуть другой код, поскольку данные уже изменились. Для повторяемой проверки ролей используйте папку 8 после регистрации Ани и Бориса в папке 0. Очистка папкой 7 сохраняет их учетные записи. Перед каждым изменяющим запросом коллекция сама обновляет CSRF-токен и cookie нужной учетки, в том числе после перезапуска сервера. Для ADMIN требуется выбранное окружение RBPO local; при отсутствии данных запрос останавливается с понятным сообщением. Для автоматического обновления CSRF добавьте localhost в Cookies > Domains Allowlist.",
+    "description": "Для CRUD и бизнес-операций обеих лабораторных используйте папку «9. CRUD и проживание (лабы 3 и 4)». Это самостоятельная цепочка: начните с подпапки 0 и идите по порядку. Для нового запуска или после перезапуска Postman начните с первого запроса этой подпапки. Выберите окружение RBPO local и выполняйте папки с 0 по 6 по порядку. У каждого запроса явно задана учетка на вкладке Authorization. ADMIN-запросы автоматически отправляют Basic Auth с данными администратора из окружения: отдельного входа нет. Запросы «Без Authorization» не отправляют логин и пароль. Cookie нужны для CSRF и не заменяют Basic Auth. У ADMIN, Ани, Бориса и анонимного клиента отдельные cookie и CSRF-токены; в основных запросах cookie jar отключена. В описании каждого запроса указаны действие, ожидаемый код и причина. Папка 7 удаляет созданные данные по желанию. Для нового полного запуска начните с первого запроса. Коды в названиях операций относятся к последовательному запуску: повторная регистрация, отмена или удаление могут вернуть другой код, поскольку данные уже изменились. Для повторяемой проверки ролей используйте папку 8 после регистрации Ани и Бориса в папке 0. Очистка папкой 7 сохраняет их учетные записи. Перед каждым изменяющим запросом коллекция сама обновляет CSRF-токен и cookie нужной учетки, в том числе после перезапуска сервера. Для ADMIN требуется выбранное окружение RBPO local; при отсутствии данных запрос останавливается с понятным сообщением. Для автоматического обновления CSRF добавьте localhost в Cookies > Domains Allowlist.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_postman_id": "f89a8734-e3a2-438e-a062-6f3fa36a2869"
   },
@@ -168,6 +168,86 @@
     },
     {
       "key": "anonymousCsrfToken",
+      "value": ""
+    },
+    {
+      "key": "demoRunId",
+      "value": ""
+    },
+    {
+      "key": "demoAnyaEmail",
+      "value": ""
+    },
+    {
+      "key": "demoBorisEmail",
+      "value": ""
+    },
+    {
+      "key": "demoToday",
+      "value": ""
+    },
+    {
+      "key": "demoDate30",
+      "value": ""
+    },
+    {
+      "key": "demoDate60",
+      "value": ""
+    },
+    {
+      "key": "demoAnyaId",
+      "value": ""
+    },
+    {
+      "key": "demoBorisId",
+      "value": ""
+    },
+    {
+      "key": "demoExtraUserId",
+      "value": ""
+    },
+    {
+      "key": "demoRoomAId",
+      "value": ""
+    },
+    {
+      "key": "demoRoomBId",
+      "value": ""
+    },
+    {
+      "key": "demoRoomCId",
+      "value": ""
+    },
+    {
+      "key": "demoRoomDId",
+      "value": ""
+    },
+    {
+      "key": "demoCrudApplicationId",
+      "value": ""
+    },
+    {
+      "key": "demoCrudContractId",
+      "value": ""
+    },
+    {
+      "key": "demoCrudTransferId",
+      "value": ""
+    },
+    {
+      "key": "demoApplicationId",
+      "value": ""
+    },
+    {
+      "key": "demoContractId",
+      "value": ""
+    },
+    {
+      "key": "demoTransferId",
+      "value": ""
+    },
+    {
+      "key": "demoCancelApplicationId",
       "value": ""
     }
   ],
@@ -7120,6 +7200,3095 @@
           }
         }
       ]
+    },
+    {
+      "name": "9. CRUD и проживание (лабы 3 и 4)",
+      "description": "Самостоятельный сценарий. Выберите RBPO local и начните с запроса «01. Начать новый сценарий CRUD и проживания (200)» в подпапке 0. Затем выполняйте подпапки по порядку. Для него не нужно запускать папки с 0 по 8 коллекции. Email, номера комнат, даты и ID подставляются автоматически. Лаба 3: CRUD пяти сущностей и пять бизнес-операций. Лаба 4: Basic Auth, права владельца и администратора, отказы 401 и 403. CSRF обновляется перед изменяющими запросами. После перезапуска Postman начните сценарий заново. Для Cookie-скрипта нужен localhost в Cookies > Domains Allowlist. Подпапка 5 удаляет только данные этого сценария и сохраняет Аню и Бориса.",
+      "item": [
+        {
+          "name": "0. Подготовка",
+          "description": "Первый запрос создает новый суффикс и сбрасывает только переменные demo*. Далее регистрируются новые Аня и Борис. Проверка /api/me подтверждает, какая учетка используется.",
+          "item": [
+            {
+              "name": "01. Начать новый сценарий CRUD и проживания (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "noauth"
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anonymousSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/csrf-token",
+                "description": "От чьего лица: Анонимный клиент. Authorization не отправляется.\n\nЗапрос: GET /csrf-token.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: headerName и token. Создается новый суффикс сценария.\n\nBasic Auth отсутствует."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 200) {",
+                      "    pm.collectionVariables.set(\"anonymousCsrfToken\", pm.response.json().token);",
+                      "    const cookie = pm.response.headers.get(\"Set-Cookie\");",
+                      "    const match = cookie && cookie.match(/JSESSIONID=([^;]+)/);",
+                      "    if (match) { pm.collectionVariables.set(\"anonymousSessionId\", match[1]); }",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "02. Без Authorization: зарегистрировать Аню (201)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "noauth"
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anonymousSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anonymousCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/register",
+                "description": "От чьего лица: Анонимный клиент. Authorization не отправляется.\n\nЗапрос: POST /api/register.\n\nОжидаемый HTTP-код при выполнении по порядку: 201.\n\nОжидаемый ответ: Новая учетка с role=USER и enabled=true. Пароль и хеш отсутствуют.\n\nВ БД: Новая запись users и связанная application_users; пароль хранится как BCrypt-хеш.\n\nBasic Auth отсутствует. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Аня {{demoRunId}}\",\n  \"email\": \"{{demoAnyaEmail}}\",\n  \"password\": \"{{userPassword}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    pm.collectionVariables.set(\"demoAnyaId\", pm.response.json().userId);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "03. Без Authorization: зарегистрировать Бориса (201)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "noauth"
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anonymousSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anonymousCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/register",
+                "description": "От чьего лица: Анонимный клиент. Authorization не отправляется.\n\nЗапрос: POST /api/register.\n\nОжидаемый HTTP-код при выполнении по порядку: 201.\n\nОжидаемый ответ: Новая учетка с role=USER и enabled=true. Пароль и хеш отсутствуют.\n\nВ БД: Новая запись users и связанная application_users; пароль хранится как BCrypt-хеш.\n\nBasic Auth отсутствует. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Борис {{demoRunId}}\",\n  \"email\": \"{{demoBorisEmail}}\",\n  \"password\": \"{{userPassword}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    pm.collectionVariables.set(\"demoBorisId\", pm.response.json().userId);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "04. ADMIN (Basic): текущая учетная запись (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/me",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: GET /api/me.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: role=ADMIN. Для Ани и Бориса email совпадает с учёткой этого сценария.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "05. Аня (USER, Basic): текущая учетная запись (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/me",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: GET /api/me.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: role=USER. Для Ани и Бориса email совпадает с учёткой этого сценария.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "06. Борис (USER, Basic): текущая учетная запись (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoBorisEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{borisSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/me",
+                "description": "От чьего лица: Борис с ролью USER, email {{demoBorisEmail}}.\n\nЗапрос: GET /api/me.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: role=USER. Для Ани и Бориса email совпадает с учёткой этого сценария.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            }
+          ]
+        },
+        {
+          "name": "1. CRUD пользователей",
+          "description": "Администратор создает и удаляет отдельного пользователя. Аня читает и изменяет свои данные. Борису доступ к данным Ани запрещен.",
+          "item": [
+            {
+              "name": "01. ADMIN (Basic): создать пользователя Ивана (201)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/users",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: POST /api/users.\n\nОжидаемый HTTP-код при выполнении по порядку: 201.\n\nОжидаемый ответ: id нового пользователя и name.\n\nВ БД: В users добавлен Иван. Учётка для входа здесь не создаётся.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Иван {{demoRunId}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    pm.collectionVariables.set(\"demoExtraUserId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "02. ADMIN (Basic): список пользователей (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/users",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: GET /api/users.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Массив пользователей, включая Аню, Бориса и Ивана этого сценария.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "03. ADMIN (Basic): прочитать данные Ивана (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/users/{{demoExtraUserId}}",
+                "description": "От чьего лица: администратор ADMIN.\n\nЗапрос: GET /api/users/{{demoExtraUserId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Созданный ранее Иван с id={{demoExtraUserId}}."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "04. ADMIN (Basic): изменить имя Ивана (200)",
+              "request": {
+                "method": "PATCH",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/users/{{demoExtraUserId}}",
+                "description": "От чьего лица: администратор ADMIN.\n\nЗапрос: PATCH /api/users/{{demoExtraUserId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Имя изменено на Иван Петров с суффиксом этого запуска. В users обновлено name.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Иван Петров {{demoRunId}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "05. Аня (USER, Basic): прочитать свои данные (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/users/{{demoAnyaId}}",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: GET /api/users/{{demoAnyaId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: id={{demoAnyaId}}, имя Ани.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "06. Аня (USER, Basic): изменить свое имя (200)",
+              "request": {
+                "method": "PATCH",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anyaCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/users/{{demoAnyaId}}",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: PATCH /api/users/{{demoAnyaId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Имя изменено на Анна с суффиксом текущего запуска.\n\nВ БД: Изменено поле name в users; email и пароль учётки остаются прежними.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Анна {{demoRunId}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "07. Борис (USER, Basic): прочитать чужие данные (403)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoBorisEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{borisSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/users/{{demoAnyaId}}",
+                "description": "От чьего лица: Борис с ролью USER, email {{demoBorisEmail}}.\n\nЗапрос: GET /api/users/{{demoAnyaId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 403.\n\nОжидаемый ответ: Доступ запрещен: пользователь запрашивает запись другого владельца.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "08. Без Authorization: список пользователей (401)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "noauth"
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anonymousSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/users",
+                "description": "От чьего лица: Анонимный клиент. Authorization не отправляется.\n\nЗапрос: GET /api/users.\n\nОжидаемый HTTP-код при выполнении по порядку: 401.\n\nОжидаемый ответ: Требуется Basic Auth.\n\nBasic Auth отсутствует."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "09. ADMIN (Basic): удалить Ивана (204)",
+              "request": {
+                "method": "DELETE",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/users/{{demoExtraUserId}}",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: DELETE /api/users/{{demoExtraUserId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 204.\n\nОжидаемый ответ: Пустое тело ответа.\n\nВ БД: Пользователь Иван удален. Аня и Борис сохранены.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "10. ADMIN (Basic): проверить удаление Ивана (404)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/users/{{demoExtraUserId}}",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: GET /api/users/{{demoExtraUserId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 404.\n\nОжидаемый ответ: Пользователь не найден.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. CRUD комнат",
+          "description": "Создаются отдельные комнаты A, B и C для сценария. Комната D используется только для удаления. Все номера включают уникальный суффикс.",
+          "item": [
+            {
+              "name": "01. ADMIN (Basic): создать комнату A (201)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: POST /api/rooms.\n\nОжидаемый HTTP-код при выполнении по порядку: 201.\n\nОжидаемый ответ: Новая открытая комната, capacity=1.\n\nВ БД: Новая запись в rooms.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"number\": \"A-{{demoRunId}}\",\n  \"capacity\": 1,\n  \"available\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    pm.collectionVariables.set(\"demoRoomAId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "02. ADMIN (Basic): создать комнату B (201)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: POST /api/rooms.\n\nОжидаемый HTTP-код при выполнении по порядку: 201.\n\nОжидаемый ответ: Новая открытая комната, capacity=1.\n\nВ БД: Новая запись в rooms.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"number\": \"B-{{demoRunId}}\",\n  \"capacity\": 1,\n  \"available\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    pm.collectionVariables.set(\"demoRoomBId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "03. ADMIN (Basic): создать комнату C (201)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: POST /api/rooms.\n\nОжидаемый HTTP-код при выполнении по порядку: 201.\n\nОжидаемый ответ: Новая открытая комната, capacity=1.\n\nВ БД: Новая запись в rooms.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"number\": \"C-{{demoRunId}}\",\n  \"capacity\": 1,\n  \"available\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    pm.collectionVariables.set(\"demoRoomCId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "04. ADMIN (Basic): создать комнату D (201)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: POST /api/rooms.\n\nОжидаемый HTTP-код при выполнении по порядку: 201.\n\nОжидаемый ответ: Новая открытая комната, capacity=1.\n\nВ БД: Новая запись в rooms.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"number\": \"D-{{demoRunId}}\",\n  \"capacity\": 1,\n  \"available\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    pm.collectionVariables.set(\"demoRoomDId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "05. ADMIN (Basic): список комнат (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: GET /api/rooms.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Массив комнат, включая A, B, C и D этого сценария.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "06. Аня (USER, Basic): прочитать комнату A (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms/{{demoRoomAId}}",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: GET /api/rooms/{{demoRoomAId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Комната A доступна для чтения пользователю USER.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "07. ADMIN (Basic): изменить вместимость комнаты A (200)",
+              "request": {
+                "method": "PATCH",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms/{{demoRoomAId}}",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: PATCH /api/rooms/{{demoRoomAId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: capacity=2.\n\nВ БД: В rooms обновлена вместимость комнаты A.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"capacity\": 2\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "08. Аня (USER, Basic): создать комнату без прав ADMIN (403)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anyaCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: POST /api/rooms.\n\nОжидаемый HTTP-код при выполнении по порядку: 403.\n\nОжидаемый ответ: Доступ запрещен: создавать комнаты может только ADMIN.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"number\": \"X-{{demoRunId}}\",\n  \"capacity\": 1,\n  \"available\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "09. Без Authorization: создать комнату без авторизации (401)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "noauth"
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anonymousSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anonymousCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms",
+                "description": "От чьего лица: Анонимный клиент. Authorization не отправляется.\n\nЗапрос: POST /api/rooms.\n\nОжидаемый HTTP-код при выполнении по порядку: 401.\n\nОжидаемый ответ: Требуется Basic Auth. Корректный CSRF не дает прав администратора.\n\nBasic Auth отсутствует. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"number\": \"X-{{demoRunId}}\",\n  \"capacity\": 1,\n  \"available\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "10. ADMIN (Basic): удалить комнату D (204)",
+              "request": {
+                "method": "DELETE",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms/{{demoRoomDId}}",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: DELETE /api/rooms/{{demoRoomDId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 204.\n\nОжидаемый ответ: Пустое тело ответа.\n\nВ БД: Свободная комната D удалена.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "11. ADMIN (Basic): проверить удаление комнаты D (404)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms/{{demoRoomDId}}",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: GET /api/rooms/{{demoRoomDId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 404.\n\nОжидаемый ответ: Комната не найдена.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. CRUD заявок, договоров и переселений",
+          "description": "Для CRUD создается отдельная заявка Ани. Администратор меняет заявителя на Бориса, создает договор и обновляет его. Борис создает, читает, изменяет и удаляет заявку на переселение. После выселения удаляются договор и заявка. Основная цепочка проживания Ани находится в подпапке 4.",
+          "item": [
+            {
+              "name": "01. Аня (USER, Basic): создать свою заявку (201)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anyaCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: POST /api/housing-applications.\n\nОжидаемый HTTP-код при выполнении по порядку: 201.\n\nОжидаемый ответ: Новая заявка Аняа со status=NEW.\n\nВ БД: В housing_applications добавлена заявка Аняа.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": {{demoAnyaId}}\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    pm.collectionVariables.set(\"demoCrudApplicationId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "02. ADMIN (Basic): список заявок (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: GET /api/housing-applications.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Массив заявок, включая созданную заявку Бориса.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "03. Аня (USER, Basic): прочитать свою заявку (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demoCrudApplicationId}}",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: GET /api/housing-applications/{{demoCrudApplicationId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Заявка Аняа со status=NEW.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "04. ADMIN (Basic): изменить заявителя с Ани на Бориса (200)",
+              "request": {
+                "method": "PATCH",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demoCrudApplicationId}}",
+                "description": "От чьего лица: администратор ADMIN.\n\nЗапрос: PATCH /api/housing-applications/{{demoCrudApplicationId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: userId={{demoBorisId}}, status=NEW.\n\nВ БД: в housing_applications изменен user_id с Ани на Бориса. У новой заявки администратор может поменять заявителя. Далее договор создается уже для Бориса.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": {{demoBorisId}},\n  \"status\": \"NEW\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "05. ADMIN (Basic): создать договор Бориса через CRUD (201)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: POST /api/residence-contracts.\n\nОжидаемый HTTP-код при выполнении по порядку: 201.\n\nОжидаемый ответ: Договор ACTIVE в комнате C до {{demoDate30}}.\n\nВ БД: Новый residence_contracts; заявка Бориса получает APPROVED.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"applicationId\": {{demoCrudApplicationId}},\n  \"roomId\": {{demoRoomCId}},\n  \"checkInDate\": \"{{demoToday}}\",\n  \"checkOutDate\": \"{{demoDate30}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    pm.collectionVariables.set(\"demoCrudContractId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "06. ADMIN (Basic): список договоров (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: GET /api/residence-contracts.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Массив договоров, включая договор Бориса.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "07. Борис (USER, Basic): прочитать свой договор (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoBorisEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{borisSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoCrudContractId}}",
+                "description": "От чьего лица: Борис с ролью USER, email {{demoBorisEmail}}.\n\nЗапрос: GET /api/residence-contracts/{{demoCrudContractId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Действующий договор Бориса.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "08. ADMIN (Basic): изменить дату окончания договора (200)",
+              "request": {
+                "method": "PATCH",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoCrudContractId}}",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: PATCH /api/residence-contracts/{{demoCrudContractId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Новая дата окончания {{demoDate60}}, status=ACTIVE.\n\nВ БД: В residence_contracts обновлена check_out_date.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"checkOutDate\": \"{{demoDate60}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "09. Борис (USER, Basic): создать свою заявку на переселение (201)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoBorisEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{borisSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{borisCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/room-transfer-requests",
+                "description": "От чьего лица: Борис с ролью USER, email {{demoBorisEmail}}.\n\nЗапрос: POST /api/room-transfer-requests.\n\nОжидаемый HTTP-код при выполнении по порядку: 201.\n\nОжидаемый ответ: Заявка NEW из комнаты C в комнату B.\n\nВ БД: Новая запись room_transfer_requests; договор пока остается в комнате C.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": {{demoCrudContractId}},\n  \"targetRoomId\": {{demoRoomBId}}\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    pm.collectionVariables.set(\"demoCrudTransferId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "10. ADMIN (Basic): список заявок на переселение (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/room-transfer-requests",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: GET /api/room-transfer-requests.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Массив заявок, включая заявку Бориса.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "11. Борис (USER, Basic): прочитать свою заявку на переселение (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoBorisEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{borisSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/room-transfer-requests/{{demoCrudTransferId}}",
+                "description": "От чьего лица: Борис с ролью USER, email {{demoBorisEmail}}.\n\nЗапрос: GET /api/room-transfer-requests/{{demoCrudTransferId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Заявка Бориса со status=NEW.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "12. Борис (USER, Basic): изменить целевую комнату (200)",
+              "request": {
+                "method": "PATCH",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoBorisEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{borisSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{borisCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/room-transfer-requests/{{demoCrudTransferId}}",
+                "description": "От чьего лица: Борис с ролью USER, email {{demoBorisEmail}}.\n\nЗапрос: PATCH /api/room-transfer-requests/{{demoCrudTransferId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Целевая комната изменена на A. Заявка все еще NEW.\n\nВ БД: Обновлен target_room_id в room_transfer_requests.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"targetRoomId\": {{demoRoomAId}}\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "13. Борис (USER, Basic): удалить свою заявку на переселение (204)",
+              "request": {
+                "method": "DELETE",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoBorisEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{borisSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{borisCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/room-transfer-requests/{{demoCrudTransferId}}",
+                "description": "От чьего лица: Борис с ролью USER, email {{demoBorisEmail}}.\n\nЗапрос: DELETE /api/room-transfer-requests/{{demoCrudTransferId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 204.\n\nОжидаемый ответ: Пустое тело ответа.\n\nВ БД: Заявка Бориса на переселение удалена.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "14. ADMIN (Basic): выселить Бориса перед удалением договора (200)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoCrudContractId}}/check-out",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: POST /api/residence-contracts/{{demoCrudContractId}}/check-out.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Договор COMPLETED. После выселения договор можно удалить.\n\nВ БД: Договор и заявка Бориса получают COMPLETED; место в комнате C освобождается.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "15. ADMIN (Basic): удалить завершенный договор Бориса (204)",
+              "request": {
+                "method": "DELETE",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoCrudContractId}}",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: DELETE /api/residence-contracts/{{demoCrudContractId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 204.\n\nОжидаемый ответ: Пустое тело ответа.\n\nВ БД: Завершенный договор Бориса удален.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "16. Борис (USER, Basic): удалить свою заявку (204)",
+              "request": {
+                "method": "DELETE",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoBorisEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{borisSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{borisCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demoCrudApplicationId}}",
+                "description": "От чьего лица: Борис с ролью USER, email {{demoBorisEmail}}.\n\nЗапрос: DELETE /api/housing-applications/{{demoCrudApplicationId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 204.\n\nОжидаемый ответ: Пустое тело ответа.\n\nВ БД: Заявка Бориса удалена; его учетная запись сохранена.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            }
+          ]
+        },
+        {
+          "name": "4. Заселение, продление, переселение и выселение",
+          "description": "Аня подает заявку, администратор заселяет её в A, продлевает договор, одобряет переход в B и выселяет. Борис отдельно отменяет свою заявку. Чтение после операций показывает изменения данных. Запросы 401/403 проверяют те же ручки под другими учетками.",
+          "item": [
+            {
+              "name": "01. Аня (USER, Basic): подать заявку на проживание (201)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anyaCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: POST /api/housing-applications.\n\nОжидаемый HTTP-код при выполнении по порядку: 201.\n\nОжидаемый ответ: Заявка Ани NEW.\n\nВ БД: Создана новая housing_applications.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": {{demoAnyaId}}\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    pm.collectionVariables.set(\"demoApplicationId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "02. Борис (USER, Basic): подать отдельную заявку для отмены (201)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoBorisEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{borisSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{borisCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications",
+                "description": "От чьего лица: Борис с ролью USER, email {{demoBorisEmail}}.\n\nЗапрос: POST /api/housing-applications.\n\nОжидаемый HTTP-код при выполнении по порядку: 201.\n\nОжидаемый ответ: Заявка Бориса NEW.\n\nВ БД: Создана отдельная housing_applications.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": {{demoBorisId}}\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    pm.collectionVariables.set(\"demoCancelApplicationId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "03. Аня (USER, Basic): отменить чужую заявку (403)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anyaCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demoCancelApplicationId}}/cancel",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: POST /api/housing-applications/{{demoCancelApplicationId}}/cancel.\n\nОжидаемый HTTP-код при выполнении по порядку: 403.\n\nОжидаемый ответ: Доступ запрещен: заявка принадлежит Борису.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "04. Борис (USER, Basic): отменить свою заявку (200)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoBorisEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{borisSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{borisCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demoCancelApplicationId}}/cancel",
+                "description": "От чьего лица: Борис с ролью USER, email {{demoBorisEmail}}.\n\nЗапрос: POST /api/housing-applications/{{demoCancelApplicationId}}/cancel.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: status=CANCELLED.\n\nВ БД: У заявки Бориса в housing_applications установлен CANCELLED. Договор не создается.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "05. Борис (USER, Basic): повторно отменить заявку (409)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoBorisEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{borisSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{borisCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demoCancelApplicationId}}/cancel",
+                "description": "От чьего лица: Борис с ролью USER, email {{demoBorisEmail}}.\n\nЗапрос: POST /api/housing-applications/{{demoCancelApplicationId}}/cancel.\n\nОжидаемый HTTP-код при выполнении по порядку: 409.\n\nОжидаемый ответ: Заявка уже отменена. Повторная отмена конфликтует с ее состоянием.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "06. Аня (USER, Basic): самостоятельно выполнить заселение (403)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anyaCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demoApplicationId}}/settle",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: POST /api/housing-applications/{{demoApplicationId}}/settle.\n\nОжидаемый HTTP-код при выполнении по порядку: 403.\n\nОжидаемый ответ: Заселение разрешено только ADMIN.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"roomId\": {{demoRoomAId}},\n  \"checkOutDate\": \"{{demoDate30}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "07. Без Authorization: выполнить заселение без авторизации (401)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "noauth"
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anonymousSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anonymousCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demoApplicationId}}/settle",
+                "description": "От чьего лица: Анонимный клиент. Authorization не отправляется.\n\nЗапрос: POST /api/housing-applications/{{demoApplicationId}}/settle.\n\nОжидаемый HTTP-код при выполнении по порядку: 401.\n\nОжидаемый ответ: Требуется Basic Auth.\n\nBasic Auth отсутствует. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"roomId\": {{demoRoomAId}},\n  \"checkOutDate\": \"{{demoDate30}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "08. ADMIN (Basic): заселить Аню в комнату A (200)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demoApplicationId}}/settle",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: POST /api/housing-applications/{{demoApplicationId}}/settle.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Новый договор ACTIVE, roomId={{demoRoomAId}}, окончание {{demoDate30}}.\n\nВ БД: В residence_contracts создается договор, housing_applications.status становится APPROVED. Комната A занята одним жильцом.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"roomId\": {{demoRoomAId}},\n  \"checkOutDate\": \"{{demoDate30}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 200) {",
+                      "    pm.collectionVariables.set(\"demoContractId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "09. Аня (USER, Basic): проверить одобрение заявки (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demoApplicationId}}",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: GET /api/housing-applications/{{demoApplicationId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: status=APPROVED.\n\nВ БД: Заявка одобрена при заселении.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "10. Аня (USER, Basic): прочитать договор после заселения (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoContractId}}",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: GET /api/residence-contracts/{{demoContractId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Договор ACTIVE в комнате A.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "11. Борис (USER, Basic): прочитать договор Ани (403)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoBorisEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{borisSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoContractId}}",
+                "description": "От чьего лица: Борис с ролью USER, email {{demoBorisEmail}}.\n\nЗапрос: GET /api/residence-contracts/{{demoContractId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 403.\n\nОжидаемый ответ: Договор принадлежит Ане. Борису доступ запрещен.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "12. Аня (USER, Basic): самостоятельно продлить договор (403)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anyaCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoContractId}}/extend",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: POST /api/residence-contracts/{{demoContractId}}/extend.\n\nОжидаемый HTTP-код при выполнении по порядку: 403.\n\nОжидаемый ответ: Продление разрешено только ADMIN.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"checkOutDate\": \"{{demoDate60}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "13. ADMIN (Basic): продлить договор Ани (200)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoContractId}}/extend",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: POST /api/residence-contracts/{{demoContractId}}/extend.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Окончание договора изменено на {{demoDate60}}.\n\nВ БД: В residence_contracts изменена check_out_date. Комната и владелец договора прежние.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"checkOutDate\": \"{{demoDate60}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "14. Аня (USER, Basic): проверить дату после продления (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoContractId}}",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: GET /api/residence-contracts/{{demoContractId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: checkOutDate={{demoDate60}}, roomId={{demoRoomAId}}.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "15. Аня (USER, Basic): подать заявку на переселение в B (201)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anyaCsrfToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/room-transfer-requests",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: POST /api/room-transfer-requests.\n\nОжидаемый HTTP-код при выполнении по порядку: 201.\n\nОжидаемый ответ: Заявка на переселение NEW.\n\nВ БД: Создана room_transfer_requests; договор пока привязан к A.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": {{demoContractId}},\n  \"targetRoomId\": {{demoRoomBId}}\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    pm.collectionVariables.set(\"demoTransferId\", pm.response.json().id);",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "16. Аня (USER, Basic): самостоятельно одобрить переселение (403)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anyaCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/room-transfer-requests/{{demoTransferId}}/approve",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: POST /api/room-transfer-requests/{{demoTransferId}}/approve.\n\nОжидаемый HTTP-код при выполнении по порядку: 403.\n\nОжидаемый ответ: Одобрение переселения разрешено только ADMIN.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "17. ADMIN (Basic): переселить Аню из A в B (200)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/room-transfer-requests/{{demoTransferId}}/approve",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: POST /api/room-transfer-requests/{{demoTransferId}}/approve.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Заявка на переселение APPROVED.\n\nВ БД: room_transfer_requests.status становится APPROVED; в residence_contracts.room_id теперь B. Место в A освобождается.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "18. Аня (USER, Basic): проверить комнату после переселения (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoContractId}}",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: GET /api/residence-contracts/{{demoContractId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Договор ACTIVE, roomId={{demoRoomBId}}. Дата окончания прежняя.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "19. Аня (USER, Basic): проверить одобрение переселения (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/room-transfer-requests/{{demoTransferId}}",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: GET /api/room-transfer-requests/{{demoTransferId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: status=APPROVED.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "20. Аня (USER, Basic): самостоятельно выполнить выселение (403)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anyaCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoContractId}}/check-out",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: POST /api/residence-contracts/{{demoContractId}}/check-out.\n\nОжидаемый HTTP-код при выполнении по порядку: 403.\n\nОжидаемый ответ: Выселение разрешено только ADMIN.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "21. ADMIN (Basic): выселить Аню (200)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoContractId}}/check-out",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: POST /api/residence-contracts/{{demoContractId}}/check-out.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Договор COMPLETED, дата окончания {{demoToday}}.\n\nВ БД: residence_contracts и housing_applications становятся COMPLETED. Место в B освобождается.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "22. Аня (USER, Basic): проверить договор после выселения (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoContractId}}",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: GET /api/residence-contracts/{{demoContractId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Договор COMPLETED.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "23. Аня (USER, Basic): проверить заявку после выселения (200)",
+              "request": {
+                "method": "GET",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demoApplicationId}}",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: GET /api/housing-applications/{{demoApplicationId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 200.\n\nОжидаемый ответ: Заявка COMPLETED.\n\nBasic Auth задан в Authorization этого запроса."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "24. ADMIN (Basic): повторно выполнить выселение (409)",
+              "request": {
+                "method": "POST",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoContractId}}/check-out",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: POST /api/residence-contracts/{{demoContractId}}/check-out.\n\nОжидаемый HTTP-код при выполнении по порядку: 409.\n\nОжидаемый ответ: Договор уже завершен. Повторное выселение запрещено.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            }
+          ]
+        },
+        {
+          "name": "5. Удаление созданных данных (необязательно)",
+          "description": "Выполните после подпапки 4. Удаляются только созданные здесь заявки, договор, переселение и комнаты. Учетки Ани и Бориса сохраняются, /api/me можно повторять. Новый сценарий запускается первым запросом подпапки 0.",
+          "item": [
+            {
+              "name": "01. Аня (USER, Basic): удалить завершенную заявку на переселение (204)",
+              "request": {
+                "method": "DELETE",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anyaCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/room-transfer-requests/{{demoTransferId}}",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: DELETE /api/room-transfer-requests/{{demoTransferId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 204.\n\nОжидаемый ответ: Пустое тело ответа.\n\nВ БД: Удалена заявка на переселение Ани.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "02. ADMIN (Basic): удалить завершенный договор Ани (204)",
+              "request": {
+                "method": "DELETE",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/residence-contracts/{{demoContractId}}",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: DELETE /api/residence-contracts/{{demoContractId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 204.\n\nОжидаемый ответ: Пустое тело ответа.\n\nВ БД: Удален завершенный договор Ани.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "03. Аня (USER, Basic): удалить свою завершенную заявку (204)",
+              "request": {
+                "method": "DELETE",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoAnyaEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{anyaSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{anyaCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demoApplicationId}}",
+                "description": "От чьего лица: Аня с ролью USER, email {{demoAnyaEmail}}.\n\nЗапрос: DELETE /api/housing-applications/{{demoApplicationId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 204.\n\nОжидаемый ответ: Пустое тело ответа.\n\nВ БД: Удалена завершенная заявка Ани.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "04. Борис (USER, Basic): удалить свою отмененную заявку (204)",
+              "request": {
+                "method": "DELETE",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{demoBorisEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{userPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{borisSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{borisCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/housing-applications/{{demoCancelApplicationId}}",
+                "description": "От чьего лица: Борис с ролью USER, email {{demoBorisEmail}}.\n\nЗапрос: DELETE /api/housing-applications/{{demoCancelApplicationId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 204.\n\nОжидаемый ответ: Пустое тело ответа.\n\nВ БД: Удалена отмененная заявка Бориса.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "05. ADMIN (Basic): удалить свободную комнату A (204)",
+              "request": {
+                "method": "DELETE",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms/{{demoRoomAId}}",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: DELETE /api/rooms/{{demoRoomAId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 204.\n\nОжидаемый ответ: Пустое тело ответа.\n\nВ БД: Свободная комната A этого сценария удалена.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "06. ADMIN (Basic): удалить свободную комнату B (204)",
+              "request": {
+                "method": "DELETE",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms/{{demoRoomBId}}",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: DELETE /api/rooms/{{demoRoomBId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 204.\n\nОжидаемый ответ: Пустое тело ответа.\n\nВ БД: Свободная комната B этого сценария удалена.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            },
+            {
+              "name": "07. ADMIN (Basic): удалить свободную комнату C (204)",
+              "request": {
+                "method": "DELETE",
+                "auth": {
+                  "type": "basic",
+                  "basic": [
+                    {
+                      "key": "username",
+                      "value": "{{adminEmail}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{adminPassword}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "JSESSIONID={{adminSessionId}}"
+                  },
+                  {
+                    "key": "X-CSRF-TOKEN",
+                    "value": "{{adminCsrfToken}}"
+                  }
+                ],
+                "url": "{{baseUrl}}/api/rooms/{{demoRoomCId}}",
+                "description": "От чьего лица: Администратор с ролью ADMIN.\n\nЗапрос: DELETE /api/rooms/{{demoRoomCId}}.\n\nОжидаемый HTTP-код при выполнении по порядку: 204.\n\nОжидаемый ответ: Пустое тело ответа.\n\nВ БД: Свободная комната C этого сценария удалена.\n\nBasic Auth задан в Authorization этого запроса. Cookie и CSRF-токен обновляются автоматически."
+              },
+              "protocolProfileBehavior": {
+                "disableCookies": true
+              }
+            }
+          ]
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (!pm.collectionVariables.get(\"demoRunId\")) {",
+              "    pm.execution.skipRequest();",
+              "    throw new Error(\"Начните с первого запроса подпапки 9 / 0. Подготовка.\");",
+              "}",
+              "const content = pm.request.url.toString() + \"\\n\" + (pm.request.body && pm.request.body.raw || \"\");",
+              "for (const match of content.matchAll(/{{(demo[A-Za-z]+)}}/g)) {",
+              "    if (!pm.collectionVariables.get(match[1])) {",
+              "        pm.execution.skipRequest();",
+              "        throw new Error(\"Не заполнена переменная \" + match[1] + \". Выполните предыдущие запросы сценария.\");",
+              "    }",
+              "}",
+              "for (const actor of [[\"Аня (USER, Basic)\", \"demoAnyaId\"], [\"Борис (USER, Basic)\", \"demoBorisId\"]]) {",
+              "    if (pm.info.requestName.includes(actor[0]) && !pm.collectionVariables.get(actor[1])) {",
+              "        pm.execution.skipRequest();",
+              "        throw new Error(\"Сначала зарегистрируйте Аню и Бориса в подпапке 0 этого сценария.\");",
+              "    }",
+              "}"
+            ]
+          }
+        }
+      ]
     }
   ],
   "event": [
@@ -7128,6 +10297,22 @@
       "script": {
         "type": "text/javascript",
         "exec": [
+          "if (pm.info.requestName === \"01. Начать новый сценарий CRUD и проживания (200)\") {",
+          "    const keys = [\"demoRunId\",\"demoAnyaEmail\",\"demoBorisEmail\",\"demoToday\",\"demoDate30\",\"demoDate60\",\"demoAnyaId\",\"demoBorisId\",\"demoExtraUserId\",\"demoRoomAId\",\"demoRoomBId\",\"demoRoomCId\",\"demoRoomDId\",\"demoCrudApplicationId\",\"demoCrudContractId\",\"demoCrudTransferId\",\"demoApplicationId\",\"demoContractId\",\"demoTransferId\",\"demoCancelApplicationId\"];",
+          "    for (const key of keys) { pm.collectionVariables.set(key, \"\"); }",
+          "    const id = pm.variables.replaceIn(\"{{$guid}}\");",
+          "    pm.collectionVariables.set(\"demoRunId\", id);",
+          "    pm.collectionVariables.set(\"demoAnyaEmail\", \"anya-\" + id + \"@example.test\");",
+          "    pm.collectionVariables.set(\"demoBorisEmail\", \"boris-\" + id + \"@example.test\");",
+          "    const today = new Date();",
+          "    pm.collectionVariables.set(\"demoToday\", today.toLocaleDateString(\"en-CA\", {timeZone: \"Europe/Moscow\"}));",
+          "    for (const days of [30, 60]) {",
+          "        const date = new Date(today);",
+          "        date.setDate(date.getDate() + days);",
+          "        pm.collectionVariables.set(\"demoDate\" + days, date.toLocaleDateString(\"en-CA\", {timeZone: \"Europe/Moscow\"}));",
+          "    }",
+          "}",
+          "",
           "if (pm.info.requestName === \"01. Без Authorization: получить CSRF-токен (200)\") {",
           "    const keys = [\"runId\",\"anyaEmail\",\"borisEmail\",\"today\",\"date30\",\"date60\",\"date90\",\"anyaId\",\"borisId\",\"registeredByAdminId\",\"registeredByUserId\",\"extraUserId\",\"roomAId\",\"roomBId\",\"roomCId\",\"extraRoomId\",\"applicationId\",\"borisApplicationId\",\"ownerDeleteAppId\",\"adminDeleteAppId\",\"contractId\",\"transferId\",\"adminTransferId\",\"cancelAppId\",\"adminCancelAppId\",\"approvedTransferId\",\"pendingTransferId\",\"newApplicationId\",\"newContractId\",\"adminSessionId\",\"adminCsrfToken\",\"anyaSessionId\",\"anyaCsrfToken\",\"borisSessionId\",\"borisCsrfToken\",\"anonymousSessionId\",\"anonymousCsrfToken\"];",
           "    for (const key of keys) { pm.collectionVariables.set(key, \"\"); }",

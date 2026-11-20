@@ -1,20 +1,24 @@
 package ru.mtuci.rbpo.lab2.configuration;
 
-import jakarta.servlet.DispatcherType;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.security.config.Customizer.withDefaults;
+import jakarta.servlet.DispatcherType;
+
+import ru.mtuci.rbpo.lab2.service.JwtService;
 
 @Configuration
 // Включает проверку @PreAuthorize перед вызовом методов.
@@ -37,26 +41,30 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(DaoAuthenticationProvider provider) {
+        return new ProviderManager(provider);
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(
-            HttpSecurity http, DaoAuthenticationProvider provider) throws Exception {
+            HttpSecurity http, DaoAuthenticationProvider provider,
+            JwtService jwt, UserDetailsService users) throws Exception {
         http
                 .authenticationProvider(provider)
-                // Результат входа хранится только в текущем запросе.
-                .securityContext(context -> context
-                        .securityContextRepository(new RequestAttributeSecurityContextRepository()))
-                // Для POST/PATCH/DELETE нужны CSRF-токен и cookie его сессии.
-                .csrf(withDefaults())
-                // Лямбда задает правила маршрутов; первое подходящее правило применяется.
+                // Токены передаются явно в заголовке и JSON, без аутентификации через cookie.
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(errors -> errors.authenticationEntryPoint((request, response, error) -> {
+                    response.setHeader("WWW-Authenticate", "Bearer");
+                    response.setStatus(401);
+                }))
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
-                        // Доступны без входа; защита CSRF остается включенной.
-                        .requestMatchers(HttpMethod.GET, "/csrf-token").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
-                        // Остальные API требуют входа; роли проверяем через @PreAuthorize.
+                        .requestMatchers(HttpMethod.POST,
+                                "/auth/login", "/auth/register", "/auth/refresh", "/api/register").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().denyAll())
-                // Логин и пароль приходят в заголовке Authorization: Basic ...
-                .httpBasic(withDefaults());
+                .addFilterBefore(new JwtTokenFilter(jwt, users), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

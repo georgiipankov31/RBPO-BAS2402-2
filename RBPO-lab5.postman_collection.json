@@ -1,0 +1,668 @@
+{
+  "info": {
+    "name": "Общежитие. JWT и сессии",
+    "description": "Задание 5. Запускайте запросы по порядку. Первый запрос регистрирует Аню с новым email и создает отдельную сессию регистрации. Вход создает другую сессию с deviceId={{jwtLoginDeviceId}}. Сценарий обновления проверяйте в БД по этому deviceId: ACTIVE, затем USED + ACTIVE, после повторного старого refresh REVOKED + ACTIVE. Пароли и токены подставляются автоматически; cookie и CSRF не используются. Для нового запуска начните с первого запроса.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:1218"
+    },
+    {
+      "key": "jwtRunId",
+      "value": ""
+    },
+    {
+      "key": "jwtEmail",
+      "value": ""
+    },
+    {
+      "key": "jwtPassword",
+      "value": ""
+    },
+    {
+      "key": "jwtRegistrationDeviceId",
+      "value": ""
+    },
+    {
+      "key": "jwtLoginDeviceId",
+      "value": ""
+    },
+    {
+      "key": "jwtRegistrationAccess",
+      "value": ""
+    },
+    {
+      "key": "jwtRegistrationRefresh",
+      "value": ""
+    },
+    {
+      "key": "jwtAccess",
+      "value": ""
+    },
+    {
+      "key": "jwtRefresh",
+      "value": ""
+    },
+    {
+      "key": "jwtOldAccess",
+      "value": ""
+    },
+    {
+      "key": "jwtOldRefresh",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "01. Зарегистрировать Аню и получить пару (201)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/register",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "description": "От чьего лица: Клиент без Bearer-авторизации.\n\nPOST /auth/register\n\nОжидаемый HTTP-код: 201.\n\nСозданы учетка USER и сессия регистрации ACTIVE. Ответ содержит только accessToken и refreshToken.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Аня {{jwtRunId}}\",\n  \"email\": \"{{jwtEmail}}\",\n  \"password\": \"{{jwtPassword}}\",\n  \"deviceId\": \"{{jwtRegistrationDeviceId}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "    const pair = pm.response.json();",
+              "    pm.collectionVariables.set(\"jwtRegistrationAccess\", pair.accessToken);",
+              "    pm.collectionVariables.set(\"jwtRegistrationRefresh\", pair.refreshToken);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02. Аня, проверить access после регистрации (200)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/me",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwtRegistrationAccess}}",
+              "type": "string"
+            }
+          ]
+        },
+        "header": [],
+        "description": "От чьего лица: Аня с ролью USER, Bearer-токен.\n\nGET /api/me\n\nОжидаемый HTTP-код: 200.\n\nОтвет с email={{jwtEmail}}, role=USER. Пароль и его хеш отсутствуют."
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "03. Повторная регистрация (409)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/register",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "description": "От чьего лица: Клиент без Bearer-авторизации.\n\nPOST /auth/register\n\nОжидаемый HTTP-код: 409.\n\nУчетка уже существует. Новая пара токенов и новая сессия не создаются.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Аня {{jwtRunId}}\",\n  \"email\": \"{{jwtEmail}}\",\n  \"password\": \"{{jwtPassword}}\",\n  \"deviceId\": \"{{jwtRegistrationDeviceId}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "04. Попытка указать роль ADMIN (400)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/register",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "description": "От чьего лица: Клиент без Bearer-авторизации.\n\nPOST /auth/register\n\nОжидаемый HTTP-код: 400.\n\nНеизвестное поле role отклоняется. Повышенная роль не назначается.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Аня {{jwtRunId}}\",\n  \"email\": \"admin-{{jwtRunId}}@example.test\",\n  \"password\": \"{{jwtPassword}}\",\n  \"deviceId\": \"{{jwtRegistrationDeviceId}}\",\n  \"role\": \"ADMIN\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "05. Слабый пароль (400)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/register",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "description": "От чьего лица: Клиент без Bearer-авторизации.\n\nPOST /auth/register\n\nОжидаемый HTTP-код: 400.\n\nСохранены проверки надежности пароля из предыдущей лабораторной. Учетка и сессия не создаются.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Аня {{jwtRunId}}\",\n  \"email\": \"weak-{{jwtRunId}}@example.test\",\n  \"password\": \"123\",\n  \"deviceId\": \"{{jwtRegistrationDeviceId}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "06. Вход Ани, первая пара сценария (200)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/login",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "description": "От чьего лица: Клиент без Bearer-авторизации.\n\nPOST /auth/login\n\nОжидаемый HTTP-код: 200.\n\nВ user_sessions одна новая строка ACTIVE для deviceId={{jwtLoginDeviceId}}. Проверка в БД:\nSELECT id, username, device_id, status, access_token_expiry, refresh_token_expiry FROM user_sessions WHERE device_id = '{{jwtLoginDeviceId}}';",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{jwtEmail}}\",\n  \"password\": \"{{jwtPassword}}\",\n  \"deviceId\": \"{{jwtLoginDeviceId}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "    const pair = pm.response.json();",
+              "    pm.collectionVariables.set(\"jwtAccess\", pair.accessToken);",
+              "    pm.collectionVariables.set(\"jwtRefresh\", pair.refreshToken);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07. Аня, защищенная ручка с access (200)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/me",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwtAccess}}",
+              "type": "string"
+            }
+          ]
+        },
+        "header": [],
+        "description": "От чьего лица: Аня с ролью USER, Bearer-токен.\n\nGET /api/me\n\nОжидаемый HTTP-код: 200.\n\nДоступ разрешен: access валиден, учетка существует и включена."
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "08. Аня, админская ручка (403)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/users",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwtAccess}}",
+              "type": "string"
+            }
+          ]
+        },
+        "header": [],
+        "description": "От чьего лица: Аня с ролью USER, Bearer-токен.\n\nGET /api/users\n\nОжидаемый HTTP-код: 403.\n\nJWT подтверждает вход, но роль USER не дает доступ к списку пользователей."
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "09. Без access, защищенная ручка (401)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/me",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [],
+        "description": "От чьего лица: Клиент без Bearer-авторизации.\n\nGET /api/me\n\nОжидаемый HTTP-код: 401.\n\nДля доступа нужен access в Authorization: Bearer."
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "10. Refresh вместо access (401)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/me",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwtRefresh}}",
+              "type": "string"
+            }
+          ]
+        },
+        "header": [],
+        "description": "От чьего лица: Аня с ролью USER, Bearer-токен.\n\nGET /api/me\n\nОжидаемый HTTP-код: 401.\n\nФильтр принимает только JWT с type=access. Refresh не дает доступ к API."
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "11. Access вместо refresh (401)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/refresh",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "description": "От чьего лица: Клиент без Bearer-авторизации.\n\nPOST /auth/refresh\n\nОжидаемый HTTP-код: 401.\n\nОбновление принимает только JWT с type=refresh. Записей в БД не добавляется.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refreshToken\": \"{{jwtAccess}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "12. Неверный пароль (401)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/login",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "description": "От чьего лица: Клиент без Bearer-авторизации.\n\nPOST /auth/login\n\nОжидаемый HTTP-код: 401.\n\nВход отклонен. Пара не выдается, сессия не создается.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{jwtEmail}}\",\n  \"password\": \"Wrong!Password7\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "13. Не указан пароль (400)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/login",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "description": "От чьего лица: Клиент без Bearer-авторизации.\n\nPOST /auth/login\n\nОжидаемый HTTP-код: 400.\n\nОтсутствует обязательное поле password.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{jwtEmail}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "14. Пустой refresh (400)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/refresh",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "description": "От чьего лица: Клиент без Bearer-авторизации.\n\nPOST /auth/refresh\n\nОжидаемый HTTP-код: 400.\n\nОбязательное поле refreshToken пустое.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refreshToken\": \"\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "15. Некорректный JWT (401)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/refresh",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "description": "От чьего лица: Клиент без Bearer-авторизации.\n\nPOST /auth/refresh\n\nОжидаемый HTTP-код: 401.\n\nТокен не прошел проверку. Новая пара не выдается.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refreshToken\": \"not-a-jwt\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "16. Обновить пару без access и пароля (200)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/refresh",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "description": "От чьего лица: Клиент без Bearer-авторизации.\n\nPOST /auth/refresh\n\nОжидаемый HTTP-код: 200.\n\nСтарые строки токенов сохранены в jwtOldAccess и jwtOldRefresh, новые в jwtAccess и jwtRefresh. Обе строки новой пары отличаются благодаря новым jti. В БД для deviceId={{jwtLoginDeviceId}} две строки: USED и ACTIVE. username и device_id одинаковые. Время exp токенов совпадает с полями *_token_expiry.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refreshToken\": \"{{jwtRefresh}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "    pm.collectionVariables.set(\"jwtOldAccess\", pm.collectionVariables.get(\"jwtAccess\"));",
+              "    pm.collectionVariables.set(\"jwtOldRefresh\", pm.collectionVariables.get(\"jwtRefresh\"));",
+              "    const pair = pm.response.json();",
+              "    pm.collectionVariables.set(\"jwtAccess\", pair.accessToken);",
+              "    pm.collectionVariables.set(\"jwtRefresh\", pair.refreshToken);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "17. Аня, новый access после обновления (200)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/me",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwtAccess}}",
+              "type": "string"
+            }
+          ]
+        },
+        "header": [],
+        "description": "От чьего лица: Аня с ролью USER, Bearer-токен.\n\nGET /api/me\n\nОжидаемый HTTP-код: 200.\n\nНовый access дает доступ к защищенному API."
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "18. Повторно предъявить старый refresh (401)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/refresh",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "description": "От чьего лица: Клиент без Bearer-авторизации.\n\nPOST /auth/refresh\n\nОжидаемый HTTP-код: 401.\n\nСтарая строка меняется с USED на REVOKED, новая остается ACTIVE. Третья строка не создается. Отказ не содержит новой пары. Проверка в БД:\nSELECT status, count(*) FROM user_sessions WHERE device_id = '{{jwtLoginDeviceId}}' GROUP BY status;\nОжидается ACTIVE=1, REVOKED=1.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refreshToken\": \"{{jwtOldRefresh}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "19. Повторно предъявить отозванный refresh (401)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/auth/refresh",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "description": "От чьего лица: Клиент без Bearer-авторизации.\n\nPOST /auth/refresh\n\nОжидаемый HTTP-код: 401.\n\nСессия уже REVOKED. Пара не выдается, количество строк не меняется.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refreshToken\": \"{{jwtOldRefresh}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    },
+    {
+      "name": "20. Аня, новый access после отказа старому refresh (200)",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/me",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwtAccess}}",
+              "type": "string"
+            }
+          ]
+        },
+        "header": [],
+        "description": "От чьего лица: Аня с ролью USER, Bearer-токен.\n\nGET /api/me\n\nОжидаемый HTTP-код: 200.\n\nНовая пара не отзывается вместе со старым refresh. Немедленный отзыв access заданием не требуется."
+      },
+      "protocolProfileBehavior": {
+        "disableCookies": true
+      }
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if (pm.info.requestName === \"01. Зарегистрировать Аню и получить пару (201)\") {",
+          "    const id = pm.variables.replaceIn(\"{{$guid}}\");",
+          "    for (const key of [\"jwtRegistrationAccess\", \"jwtRegistrationRefresh\", \"jwtAccess\", \"jwtRefresh\", \"jwtOldAccess\", \"jwtOldRefresh\"]) {",
+          "        pm.collectionVariables.set(key, \"\");",
+          "    }",
+          "    pm.collectionVariables.set(\"jwtRunId\", id);",
+          "    pm.collectionVariables.set(\"jwtEmail\", \"anya-\" + id + \"@example.test\");",
+          "    pm.collectionVariables.set(\"jwtPassword\", \"Aa!7\" + id);",
+          "    pm.collectionVariables.set(\"jwtRegistrationDeviceId\", \"register-\" + id);",
+          "    pm.collectionVariables.set(\"jwtLoginDeviceId\", \"login-\" + id);",
+          "}",
+          "for (const [key, value] of Object.entries(pm.collectionVariables.toObject())) {",
+          "    pm.variables.set(key, value);",
+          "}",
+          "if (!pm.collectionVariables.get(\"jwtRunId\")) {",
+          "    pm.execution.skipRequest();",
+          "    throw new Error(\"Начните с первого запроса коллекции.\");",
+          "}",
+          "const requestTemplate = pm.request.url.toString() + \"\\n\" + (pm.request.body && pm.request.body.raw || \"\") + \"\\n\" + JSON.stringify(pm.request.auth);",
+          "for (const match of requestTemplate.matchAll(/{{(jwt[A-Za-z]+)}}/g)) {",
+          "    if (!pm.collectionVariables.get(match[1])) {",
+          "        pm.execution.skipRequest();",
+          "        throw new Error(\"Выполните предыдущие запросы коллекции. Не заполнено \" + match[1]);",
+          "    }",
+          "}"
+        ]
+      }
+    }
+  ]
+}
